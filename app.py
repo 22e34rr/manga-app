@@ -4,7 +4,29 @@ import pandas as pd
 
 # --- CONFIGURATION ---
 st.set_page_config(page_title="Manga Tracker", page_icon="📚", layout="wide")
+
+# --- SECURITÉ (LE VERROU) ---
+# On vérifie si le mot de passe est déjà validé dans la session
+if "password_correct" not in st.session_state:
+    st.session_state.password_correct = False
+
+def check_password():
+    # Champ pour entrer le mot de passe
+    password = st.text_input("🔒 Mot de passe", type="password")
+    if password == st.secrets["mot_de_passe"]:
+        st.session_state.password_correct = True
+        st.rerun() # Recharge la page pour afficher le contenu
+    elif password:
+        st.error("Mot de passe incorrect")
+
+# Si le mot de passe n'est pas bon, on affiche le verrou et on ARRÊTE le script ici
+if not st.session_state.password_correct:
+    check_password()
+    st.stop() 
+
+# --- LE RESTE DE VOTRE APP COMMENCE ICI ---
 st.title("📚 Ma Collection (Cloud)")
+# ... (laissez tout le reste du code inchangé en dessous) ...
 
 # --- CONNEXION GOOGLE SHEETS ---
 # On crée la connexion
